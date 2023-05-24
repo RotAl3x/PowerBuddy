@@ -1,24 +1,22 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {PaginatedListResponse} from "../Models/paginated-list-response.model";
-import {Appliance} from "../Models/appliance.model";
-import {environment} from "../../environments/environment";
-import {ApplianceCategory} from "../Models/appliance-category.model";
+import { ApplianceCategory } from '../models/appliance-category.model';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApplianceCategoryService {
-  private baseURL:string="applianceCategory";
-  constructor(private httpClient:HttpClient) { }
+  private baseUrl: string = 'applianceCategory';
 
-  public getApplianceCategory(): Observable<ApplianceCategory[]>{
-    return this.httpClient.get<ApplianceCategory[]>(`${environment.apiUrl}${this.baseURL}`);
+  constructor(private httpClient: HttpClient) { }
+
+  public getApplianceCategories(): Observable<ApplianceCategory[]>{
+    return this.httpClient.get<ApplianceCategory[]>(`${environment.apiUrl}${this.baseUrl}`);
   }
 
-
-  public getCategory(id:number): Observable<ApplianceCategory>{
-    return this.httpClient.get<ApplianceCategory>(`${environment.apiUrl}${this.baseURL}/${id}`);
+  public getCategory(id: number): Observable<ApplianceCategory>{
+    return this.httpClient.get<ApplianceCategory>(`${environment.apiUrl}${this.baseUrl}/${id}`);
   }
 }

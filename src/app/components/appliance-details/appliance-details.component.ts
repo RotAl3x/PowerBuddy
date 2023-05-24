@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { concatMap, filter, first, tap } from 'rxjs';
-import { Appliance} from "../../Models/appliance.model";
+import { Appliance } from 'src/app/models/appliance.model';
 import { ApplianceCategoryService } from 'src/app/services/appliance-category.service';
 import { ApplianceService } from 'src/app/services/appliance.service';
 
@@ -12,13 +12,13 @@ import { ApplianceService } from 'src/app/services/appliance.service';
 })
 export class ApplianceDetailsComponent implements OnInit {
   public appliance: Appliance | null = null;
-
+  
   constructor(
     private applianceService: ApplianceService,
     private applianceCategoryService: ApplianceCategoryService,
     private route: ActivatedRoute,
     private router: Router
-  ) { }
+    ) { }
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -31,16 +31,16 @@ export class ApplianceDetailsComponent implements OnInit {
         .pipe(
           filter((r) => !!r),
           concatMap((appliance) => {
-            this.appliance = appliance;
-            return this.applianceCategoryService.getCategory(appliance.applianceCategoryId);
-          }),
-          tap((applianceCategory) => {
-            if (this.appliance){
-              this.appliance.applianceCategory = applianceCategory;
-            }
-          }))
+          this.appliance = appliance;
+          return this.applianceCategoryService.getCategory(appliance.applianceCategoryId);
+        }),
+        tap((applianceCategory) => {
+          if (this.appliance){
+            this.appliance.applianceCategory = applianceCategory;
+          }
+        }))
         .subscribe();
     });
   }
-
+ 
 }
