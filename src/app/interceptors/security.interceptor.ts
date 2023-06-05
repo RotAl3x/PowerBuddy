@@ -6,19 +6,22 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import {environment} from "../../environments/environment";
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class SecurityInterceptor implements HttpInterceptor {
 
   constructor() {}
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const req= request.clone({
-      setHeaders:{
+  intercept(
+    request: HttpRequest<unknown>, 
+    next: HttpHandler): Observable<HttpEvent<unknown>> {
+    const req = request.clone({
+      setHeaders: {
         'Ocp-Apim-Subscription-Key': environment.apiSubscriptionKey
       }
     });
+
     return next.handle(req);
   }
 }

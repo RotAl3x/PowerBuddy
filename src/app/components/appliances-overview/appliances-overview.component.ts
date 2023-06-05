@@ -60,6 +60,7 @@ export class AppliancesOverviewComponent implements OnInit, AfterViewInit{
         this.appliancesCount = appliancesResult.totalCount;
         this.matchApplianceCategory(appliancesResult.appliances, applianceCategories);
         this.appliances = appliancesResult.appliances;
+        this.dataSource.data = this.appliances;
       }
     )
   }
@@ -80,10 +81,10 @@ export class AppliancesOverviewComponent implements OnInit, AfterViewInit{
     this.router.navigate([row.id], { relativeTo: this.route });
   }
 
-  applyFilter(event: Event){
+  applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-
     this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.appliances = this.dataSource.filteredData;
   }
 
   onPageChanged(event: PageEvent): void{

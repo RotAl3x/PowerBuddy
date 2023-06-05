@@ -4,6 +4,9 @@
     <mat-label>Search...</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Appliance name" #input>
   </mat-form-field>
+  <button mat-mini-fab class="ml-auto" color="primary" [routerLink]="['create']">
+    <mat-icon>add</mat-icon>
+  </button>
 </div>
 <table mat-table [dataSource]="appliances" matSort (matSortChange)="sortData($event)" class="mat-elevation-z8">
     <ng-container matColumnDef="id">

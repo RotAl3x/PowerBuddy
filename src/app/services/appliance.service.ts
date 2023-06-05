@@ -28,4 +28,8 @@ export class ApplianceService {
   public getAppliance(id: number): Observable<Appliance>{
     return this.httpClient.get<Appliance>(`${environment.apiUrl}${this.baseUrl}/${id}`);
   }
+
+  public addAppliance(appliance: Appliance): Observable<Appliance> {
+    return this.httpClient.post<Appliance>(`${environment.apiUrl}${this.baseUrl}`, appliance);
+  }
 }
