@@ -20,7 +20,7 @@ export class ApplianceCreateComponent implements OnInit{
     public applianceCategoryService: ApplianceCategoryService,
     public applianceService: ApplianceService,
     private route: ActivatedRoute,
-    private router: Router) 
+    private router: Router)
   {
     this.createForm()
   }
@@ -45,7 +45,7 @@ export class ApplianceCreateComponent implements OnInit{
   private createForm() {
     this.form = new FormGroup({
       name: new FormControl<string>(''),
-      consumption: new FormControl<number>(1),
+      consumptionWh: new FormControl<number>(1),
       count: new FormControl<number>(1),
       active: new FormControl<boolean>(false, [Validators.required]),
       applianceCategoryId: new FormControl<number | null>(null, [Validators.required])

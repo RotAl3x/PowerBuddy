@@ -81,6 +81,10 @@ export class AppliancesOverviewComponent implements OnInit, AfterViewInit{
     this.router.navigate([row.id], { relativeTo: this.route });
   }
 
+  onNavigateToUpdate(row: Appliance): void{
+    this.router.navigate([`update/${row.id}`], { relativeTo: this.route });
+  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();

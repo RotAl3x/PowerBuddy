@@ -11,15 +11,15 @@ import { ApplianceCategory } from 'src/app/models/appliance-category.model';
 export class ApplianceSharedComponent {
   @Input() form!: FormGroup;
   @Input() applianceCategories: Array<ApplianceCategory> = [];
-  
+
   public formControlHasError = formControlHasError;
 
   get name(): FormControl<string> {
     return this.form.get('name') as FormControl<string>;
   }
 
-  get consumption(): FormControl<number> {
-    return this.form.get('consumption') as FormControl<number>;
+  get consumptionWh(): FormControl<number> {
+    return this.form.get('consumptionWh') as FormControl<number>;
   }
 
   get count(): FormControl<number> {

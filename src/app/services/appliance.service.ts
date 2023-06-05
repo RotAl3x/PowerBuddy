@@ -11,7 +11,7 @@ import { PaginatedListResponse } from '../models/paginated-list-response.model';
 export class ApplianceService {
 
   private baseUrl: string = "appliance";
-  
+
   constructor(private httpClient: HttpClient) { }
 
   public getAppliances(offset: number, pageSize: number, sortField: string | null, sortDir: string | null): Observable<PaginatedListResponse<Appliance>> {
@@ -31,5 +31,9 @@ export class ApplianceService {
 
   public addAppliance(appliance: Appliance): Observable<Appliance> {
     return this.httpClient.post<Appliance>(`${environment.apiUrl}${this.baseUrl}`, appliance);
+  }
+
+  public updateAppliance(id:number,appliance: Appliance): Observable<Appliance> {
+    return this.httpClient.put<Appliance>(`${environment.apiUrl}${this.baseUrl}/${id}`, appliance);
   }
 }

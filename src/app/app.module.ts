@@ -27,6 +27,7 @@ import { ApplianceSharedComponent } from './components/appliance-shared/applianc
 import { AppliancesOverviewComponent } from './components/appliances-overview/appliances-overview.component';
 import { HomeComponent } from './components/home/home.component';
 import { SecurityInterceptor } from './interceptors/security.interceptor';
+import { ApplianceUpdateComponent } from './components/appliance-update/appliance-update.component';
 
 const MaterialModules = [
   MatToolbarModule,
@@ -52,7 +53,8 @@ const MaterialModules = [
     AppliancesOverviewComponent,
     ApplianceDetailsComponent,
     ApplianceSharedComponent,
-    ApplianceCreateComponent
+    ApplianceCreateComponent,
+    ApplianceUpdateComponent
   ],
   imports: [
     BrowserModule,
