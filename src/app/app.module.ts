@@ -28,6 +28,7 @@ import { AppliancesOverviewComponent } from './components/appliances-overview/ap
 import { HomeComponent } from './components/home/home.component';
 import { SecurityInterceptor } from './interceptors/security.interceptor';
 import { ApplianceUpdateComponent } from './components/appliance-update/appliance-update.component';
+import {NgxChartsModule} from "@swimlane/ngx-charts";
 
 const MaterialModules = [
   MatToolbarModule,
@@ -56,14 +57,15 @@ const MaterialModules = [
     ApplianceCreateComponent,
     ApplianceUpdateComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MaterialModules,
-    HttpClientModule,
-    ReactiveFormsModule
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MaterialModules,
+        HttpClientModule,
+        ReactiveFormsModule,
+        NgxChartsModule
+    ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
