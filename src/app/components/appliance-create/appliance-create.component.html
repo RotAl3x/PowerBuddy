@@ -1,8 +1,8 @@
-<form 
-[formGroup]="form" 
+<form
+[formGroup]="form"
 (ngSubmit)="onSubmit()"
 class="flex flex-col items-center">
-    <mat-card class="w-1/2">
+    <mat-card class="lg:w-1/2">
         <mat-card-header class="items-center">
             <button mat-icon-button [routerLink]="['../']">
                 <mat-icon>arrow_back</mat-icon>
@@ -10,8 +10,8 @@ class="flex flex-col items-center">
             <span class="p-2 text-lg">Create Appliance</span>
         </mat-card-header>
         <mat-card-content>
-            <app-appliance-shared 
-            [form]="form" 
+            <app-appliance-shared
+            [form]="form"
             [applianceCategories]="(applianceCategories$ | async) || []">
             </app-appliance-shared>
         </mat-card-content>

@@ -1,20 +1,21 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest, filter } from 'rxjs';
-import { ApplianceCategory } from 'src/app/models/appliance-category.model';
-import { Appliance } from 'src/app/models/appliance.model';
-import { ApplianceCategoryService } from 'src/app/services/appliance-category.service';
-import { ApplianceService } from 'src/app/services/appliance.service';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {MatPaginator, PageEvent} from '@angular/material/paginator';
+import {MatSort, Sort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {ActivatedRoute, Router} from '@angular/router';
+import {combineLatest, filter, first} from 'rxjs';
+import {ApplianceCategory} from 'src/app/models/appliance-category.model';
+import {Appliance} from 'src/app/models/appliance.model';
+import {ApplianceCategoryService} from 'src/app/services/appliance-category.service';
+import {ApplianceService} from 'src/app/services/appliance.service';
+import {BreakpointObserver, Breakpoints} from "@angular/cdk/layout";
 
 @Component({
   selector: 'app-appliances-overview',
   templateUrl: './appliances-overview.component.html',
   styleUrls: ['./appliances-overview.component.scss']
 })
-export class AppliancesOverviewComponent implements OnInit, AfterViewInit{
+export class AppliancesOverviewComponent implements OnInit, AfterViewInit {
   columns: string[] = [
     'id',
     'name',
@@ -24,6 +25,11 @@ export class AppliancesOverviewComponent implements OnInit, AfterViewInit{
     'count',
     'actions',
   ];
+  hiddenColumnsMobile=[
+    'id',
+    'applianceCategory',
+    'active'
+  ]
   dataSource = new MatTableDataSource<Appliance>();
   appliances: Appliance[] = [];
   appliancesCount: number = 0;
@@ -38,10 +44,16 @@ export class AppliancesOverviewComponent implements OnInit, AfterViewInit{
     private applianceService: ApplianceService,
     private applianceCategoryService: ApplianceCategoryService,
     private router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private breakpointObserver:BreakpointObserver) {
+  }
 
   ngOnInit(): void {
     this.getAppliances(10, 0, null, null);
+    this.breakpointObserver.observe([Breakpoints.XSmall])
+      .pipe(first()).subscribe(result=>{
+        this.columns=result.matches? this.columns.filter(c=>!this.hiddenColumnsMobile.includes(c)):this.columns;
+    })
   }
 
   ngAfterViewInit(): void {
@@ -67,8 +79,8 @@ export class AppliancesOverviewComponent implements OnInit, AfterViewInit{
   private matchApplianceCategory(
     appliances: Appliance[],
     applianceCategories: ApplianceCategory[]
-  ){
-    appliances.forEach( (appliance) =>{
+  ) {
+    appliances.forEach((appliance) => {
       const applianceCategory = applianceCategories.find(
         (ac) => ac.id == appliance.applianceCategoryId
       )
@@ -76,12 +88,22 @@ export class AppliancesOverviewComponent implements OnInit, AfterViewInit{
     })
   }
 
-  onNavigateToDetails(row: Appliance): void{
-    this.router.navigate([row.id], { relativeTo: this.route });
+  onNavigateToDetails(row: Appliance): void {
+    this.router.navigate([row.id], {relativeTo: this.route});
   }
 
-  onNavigateToUpdate(row: Appliance): void{
-    this.router.navigate([`update/${row.id}`], { relativeTo: this.route });
+  onDelete(id: number, event: Event): void {
+    event.stopPropagation();
+    if (confirm('Are you sure you want to delete this appliance?')) {
+      this.applianceService.deleteAppliance(id).pipe(first()).subscribe(() => {
+        alert('Appliance successfully deleted')
+        this.getAppliances(this.paginator.pageSize, this.paginator.pageIndex * this.paginator.pageSize, this.sort.active, this.sort.direction);
+      })
+    }
+  }
+
+  onNavigateToUpdate(id: number): void {
+    this.router.navigate([`update/${id}`], {relativeTo: this.route});
   }
 
   applyFilter(event: Event) {
@@ -90,7 +112,7 @@ export class AppliancesOverviewComponent implements OnInit, AfterViewInit{
     this.appliances = this.dataSource.filteredData;
   }
 
-  onPageChanged(event: PageEvent): void{
+  onPageChanged(event: PageEvent): void {
     this.getAppliances(event.pageSize, event.pageIndex * event.pageSize, this.sort.active, this.sort.direction);
   }
 

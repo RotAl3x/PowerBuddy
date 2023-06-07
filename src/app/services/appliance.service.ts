@@ -36,4 +36,8 @@ export class ApplianceService {
   public updateAppliance(id:number,appliance: Appliance): Observable<Appliance> {
     return this.httpClient.put<Appliance>(`${environment.apiUrl}${this.baseUrl}/${id}`, appliance);
   }
+
+  public deleteAppliance(id:number): Observable<void> {
+    return this.httpClient.delete<void>(`${environment.apiUrl}${this.baseUrl}/${id}`);
+  }
 }
