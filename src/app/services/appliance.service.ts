@@ -14,13 +14,16 @@ export class ApplianceService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public getAppliances(offset: number, pageSize: number, sortField: string | null, sortDir: string | null): Observable<PaginatedListResponse<Appliance>> {
+  public getAppliances(offset: number, pageSize: number, sortField: string | null, sortDir: string | null, search: string|null): Observable<PaginatedListResponse<Appliance>> {
     let url = `${environment.apiUrl}${this.baseUrl}?offset=${offset}&pageSize=${pageSize}`;
     if (sortField) {
       url += `&sortField=${sortField}`;
     }
     if (sortDir) {
       url += `&sortDir=${sortDir}`;
+    }
+    if (search) {
+      url += `&search=${search}`;
     }
     return this.httpClient.get<PaginatedListResponse<Appliance>>(url);
   }
