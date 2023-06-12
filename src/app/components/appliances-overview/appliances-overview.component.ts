@@ -25,7 +25,7 @@ export class AppliancesOverviewComponent implements OnInit, AfterViewInit {
     'count',
     'actions',
   ];
-  hiddenColumnsMobile=[
+  hiddenColumnsMobile = [
     'id',
     'applianceCategory',
     'active'
@@ -33,6 +33,7 @@ export class AppliancesOverviewComponent implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<Appliance>();
   appliances: Appliance[] = [];
   appliancesCount: number = 0;
+  search: string | null = null;
 
   sortField: string | undefined;
   sortDir: string | undefined;
@@ -45,14 +46,14 @@ export class AppliancesOverviewComponent implements OnInit, AfterViewInit {
     private applianceCategoryService: ApplianceCategoryService,
     private router: Router,
     private route: ActivatedRoute,
-    private breakpointObserver:BreakpointObserver) {
+    private breakpointObserver: BreakpointObserver) {
   }
 
   ngOnInit(): void {
-    this.getAppliances(10, 0, null, null);
+    this.getAppliances(10, 0, null, null, null);
     this.breakpointObserver.observe([Breakpoints.XSmall])
-      .pipe(first()).subscribe(result=>{
-        this.columns=result.matches? this.columns.filter(c=>!this.hiddenColumnsMobile.includes(c)):this.columns;
+      .pipe(first()).subscribe(result => {
+      this.columns = result.matches ? this.columns.filter(c => !this.hiddenColumnsMobile.includes(c)) : this.columns;
     })
   }
 
@@ -61,9 +62,9 @@ export class AppliancesOverviewComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  getAppliances(pageSize: number, offset: number, sortField: string | null, sortDir: string | null): void {
+  getAppliances(pageSize: number, offset: number, sortField: string | null, sortDir: string | null, search: string | null): void {
     combineLatest([
-      this.applianceService.getAppliances(offset, pageSize, sortField, sortDir),
+      this.applianceService.getAppliances(offset, pageSize, sortField, sortDir, search),
       this.applianceCategoryService.getApplianceCategories()
     ]).pipe(
       filter((r) => !!r[0] && !!r[1])
@@ -97,7 +98,7 @@ export class AppliancesOverviewComponent implements OnInit, AfterViewInit {
     if (confirm('Are you sure you want to delete this appliance?')) {
       this.applianceService.deleteAppliance(id).pipe(first()).subscribe(() => {
         alert('Appliance successfully deleted')
-        this.getAppliances(this.paginator.pageSize, this.paginator.pageIndex * this.paginator.pageSize, this.sort.active, this.sort.direction);
+        this.getAppliances(this.paginator.pageSize, this.paginator.pageIndex * this.paginator.pageSize, this.sort.active, this.sort.direction, this.search);
       })
     }
   }
@@ -108,16 +109,22 @@ export class AppliancesOverviewComponent implements OnInit, AfterViewInit {
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    this.appliances = this.dataSource.filteredData;
+    if (filterValue.length >= 3) {
+      this.search = filterValue;
+
+      this.getAppliances(this.paginator.pageSize, 0, null, null, this.search);
+    }
+    if(filterValue.length===0){
+      this.getAppliances(this.paginator.pageSize, 0, null, null, null);
+    }
   }
 
   onPageChanged(event: PageEvent): void {
-    this.getAppliances(event.pageSize, event.pageIndex * event.pageSize, this.sort.active, this.sort.direction);
+    this.getAppliances(event.pageSize, event.pageIndex * event.pageSize, this.sort.active, this.sort.direction, this.search);
   }
 
   sortData(event: Sort) {
-    this.getAppliances(this.paginator.pageSize, 0, event.active, event.direction);
+    this.getAppliances(this.paginator.pageSize, 0, event.active, event.direction, this.search);
     this.paginator.firstPage();
   }
 }
