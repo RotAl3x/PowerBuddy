@@ -111,11 +111,12 @@ export class AppliancesOverviewComponent implements OnInit, AfterViewInit {
     const filterValue = (event.target as HTMLInputElement).value;
     if (filterValue.length >= 3) {
       this.search = filterValue;
-
       this.getAppliances(this.paginator.pageSize, 0, null, null, this.search);
+      this.paginator.firstPage();
     }
     if(filterValue.length===0){
       this.getAppliances(this.paginator.pageSize, 0, null, null, null);
+      this.paginator.firstPage();
     }
   }
 
